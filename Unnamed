@@ -1,0 +1,45 @@
+Sub Form()
+    Dim wb As Workbook
+    Dim MyName As String
+    Dim MyPath As String
+    Dim sPath As String
+        
+        MyPath = Application.InputBox("Enter path:") & "\"
+        MyName = Dir(MyPath & "*.xlsx")
+        
+         Do While MyName <> ""
+            
+            sPath = MyPath + MyName
+            Set wb = Excel.Application.Workbooks.Open(sPath)
+            wb.Activate
+           
+            Dim i&, a, ws As Worksheet, sh As Worksheet, r As Range, s As Worksheet, wbb As Workbook
+            Set sh = Worksheets(1)
+            Set wbb = ActiveWorkbook
+            a = sh.Range("b2:b" & sh.Cells(sh.Rows.Count, 1).End(xlUp).Row).Value
+            
+            With CreateObject("Scripting.Dictionary")
+            For i = 1 To UBound(a)
+                .Item(a(i, 1)) = a(i, 1)
+            Next
+            Application.ScreenUpdating = 0
+            For Each a In .keys
+                sh.Copy after:=Sheets(Sheets.Count)
+                Set ws = ActiveSheet: ws.Name = .Item(a)
+                Set r = ws.Range("b1:b" & ws.Cells(ws.Rows.Count, 1).End(xlUp).Row)
+                r.AutoFilter 1, "<>" & .Item(a)
+                r.Offset(1).SpecialCells(12).EntireRow.Delete
+                ws.AutoFilterMode = 0: ws.DrawingObjects.Delete
+            Next
+            Application.ScreenUpdating = -1
+            End With
+ 
+            'Application.DisplayAlerts = False
+            wb.Save
+            wb.Close
+            MyName = Dir
+            'Application.DisplayAlerts = True
+         
+         Loop
+
+End Sub

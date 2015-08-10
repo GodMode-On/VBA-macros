@@ -1,0 +1,65 @@
+Sub Звіт_по_проектах()
+    
+    Dim R As Range, A As Range, B As Range, C As Range
+
+    Workbooks.Open ("S:\Головний Банк\Дані департаментів\деп. Клієнтів Малого і Середнього бізнесу\Звіт по проектах 2015.xlsx")
+    Windows("Звіт по проектах - МАКРОС.xlsm").Activate
+    
+    If IsEmpty(ActiveWorkbook.Sheets("Äàí³").Range("B2")) = True Then
+        MsgBox ("Завантажте дані!")
+        Exit Sub
+    End If
+    
+    Columns("B:B").NumberFormat = "m/d/yyyy"
+    Range("F2").FormulaR1C1 = "=IF(AND(LEN(RC[-3])=6,LEFT(RC[-3],2)=""20"",RIGHT(RC[-3],2)=""00""),1,0)"
+    Range("F2").AutoFill Destination:=Range(Range("F2"), Range("F2").End(xlDown))
+    Columns("F:F").Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = False
+    
+    Range("A2").FormulaR1C1 = "=IF(RC[7]=""980"",""UAH"",IF(RC[7]=""978"",""EUR"",""USD""))"
+    Range("A2").AutoFill Destination:=Range(Range("A2"), Range("B2").End(xlDown).Offset(0, -1))
+    Columns("A:A").Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = False
+    
+    Range("F1").AutoFilter
+    ActiveSheet.Range("$A$1:$T$1").AutoFilter Field:=6, Criteria1:="0"
+    Rows("2:2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete Shift:=xlUp
+     ActiveSheet.Range("$A$1:$T$1").AutoFilter Field:=6, Criteria1:="1"
+    
+    Set R = Range(Range("A2"), Range("A1").End(xlDown))
+    
+    For Each A In R
+    
+        Windows("Звіт по проектах 2015.xlsx").Activate
+        Sheets(Sheets.Count).Select
+        Set C = Range("M596").End(xlUp).Offset(1, -12)
+        C.EntireRow.Select
+        Selection.Copy
+        Selection.Insert Shift:=xlDown
+        Range(C.Offset(-3, 0), C.Offset(-2, 0)).Select
+        Selection.AutoFill Destination:=Range(C.Offset(-3, 0), C.Offset(-1, 0)), Type:=xlFillDefault
+        
+        Set B = Range("M596").End(xlUp).Offset(1, -12)
+        B.Offset(0, 4).Value = A.Value
+        B.Offset(0, 5).Value = A.Offset(0, 6).Value
+        B.Offset(0, 6).Value = A.Offset(0, 6).Value
+        B.Offset(0, 9).Value = A.Offset(0, 12).Value
+        B.Offset(0, 11).Value = A.Offset(0, 11).Value
+        B.Offset(0, 12).Value = A.Offset(0, 1).Value
+        
+    Next
+
+    
+End Sub
+
+
+
+

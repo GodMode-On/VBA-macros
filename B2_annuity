@@ -1,0 +1,44 @@
+Sub Anyitet()
+    
+    Range("Q9").Value = "Í²"
+    Range("O6").Copy
+    Range("Q6").Select
+    ActiveSheet.Paste
+    Range("O4:O6").Copy
+    Range("P4:P6").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Do Until Range("P10").Value = Range("P11").Value
+    If Range("O10").Value < Range("G6") Then
+    Range("Q6").Copy
+    Range("P5").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+       :=False, Transpose:=False
+        
+        ElseIf Range("O10").Value > Range("G6") Then
+        
+   Range("Q6").Copy
+    Range("P4").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+  
+        Else
+       If Range("O11").Value < Range("Q6") Then
+       Range("Q6").Copy
+    Range("P5").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+        
+        ElseIf Range("O11").Value > Range("Q6") Then
+        Range("Q6").Copy
+    Range("P4").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+        End If
+        
+        
+        
+        
+    End If
+    Loop
+    Range("P12").Copy
+    Range("Q6").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = False
+    Range("Q9").Value = "ÒÀÊ"
+End Sub

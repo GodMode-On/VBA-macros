@@ -1,0 +1,60 @@
+Sub Col()
+Application.ScreenUpdating = False
+ActiveSheet.Protect Password:="2014", UserInterfaceOnly:=True
+Rows("31:31").Copy
+Rows("30:30").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Range("D31").FormulaR1C1 = "=IF(AND(R[-1]C[-1]=0,R[-1]C),R[-1]C-1,R[-1]C)"
+Range("D31").AutoFill Destination:=Range("D31:U31"), Type:=xlFillDefault
+For Each s In Cells(31, 1).CurrentRegion.Rows(1).Cells
+Columns(s.Column).EntireColumn.Hidden = s.Value = 1
+Next s
+Application.ScreenUpdating = True
+End Sub
+
+Sub all()
+Application.ScreenUpdating = False
+ActiveSheet.Protect Password:="2014", UserInterfaceOnly:=True
+Range("B30:C30").Value = 0
+Range("D30:V30").Value = 1
+Columns("E:U").Hidden = True
+Columns("W:W").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.EntireColumn.Hidden = True
+Application.ScreenUpdating = True
+End Sub
+
+
+Private Sub CommandButton1_Click()
+
+Application.ScreenUpdating = False
+'Range("D4").AutoFill Destination:=Range("D4:U31"), Type:=xlFillDefault
+ActiveSheet.Protect Password:="2014", UserInterfaceOnly:=True
+
+Range("B30:D30").Value = 0
+Range("E30:V30").Value = 1
+Columns("E:U").Hidden = True
+Range("E1:V2").ClearContents
+Columns("W:W").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.EntireColumn.Hidden = True
+Application.ScreenUpdating = True
+End Sub
+
+Private Sub CommandButton3_Click()
+
+Application.ScreenUpdating = False
+ActiveSheet.Protect Password:="2014", UserInterfaceOnly:=True
+Rows("31:31").Copy
+Rows("30:30").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Range("D31").FormulaR1C1 = "=IF(AND(R[-1]C[-1]=0,R[-1]C),R[-1]C-1,R[-1]C)"
+Range("D31").AutoFill Destination:=Range("D31:U31"), Type:=xlFillDefault
+For Each s In Cells(31, 1).CurrentRegion.Rows(1).Cells
+Columns(s.Column).EntireColumn.Hidden = s.Value = 1
+Next s
+
+Application.ScreenUpdating = True
+
+End Sub
+

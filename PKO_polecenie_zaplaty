@@ -1,0 +1,77 @@
+Sub Start()
+'made by Yurii Khlian
+    ActiveSheet.Protect Password:="2014", UserInterfaceOnly:=True
+    Dim r As Range
+    Dim rr As Range
+    Set rr = Range("F3,H3,J3,F4,H4,G5,D7,D8,F9,J10,F11,J12,G14,G15,G16")
+    
+    For Each r In rr
+    If r.Text = "" Then
+        MsgBox "Wpisz znaczenie w komórce"
+        r.Select
+        Exit Sub
+    End If
+    Next
+   
+    If Range("R3") < Now() Then
+        MsgBox ("Wpisz poprawn¹ datê" & vbNewLine & "(Nie wczeœniejsza ni¿ dzisiaj)")
+        Range("F3").Select
+        Exit Sub
+    End If
+    
+    If Range("S18") > Range("S19") Then
+        MsgBox "Wpisz poprawne daty OD i DO"
+        Range("F18").Select
+        Exit Sub
+    End If
+    
+    Range("C57").Copy
+    Range("C58").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("D32").Value = Range("C58").Value
+    Application.CutCopyMode = False
+    Range("A1").Select
+    MsgBox "Treœæ powiadomienia zap³aty zosta³¹ wygenerowana"
+    
+End Sub
+
+Sub Dodaj()
+
+    ActiveSheet.Protect Password:="2014", UserInterfaceOnly:=True
+    Range("C59").Copy
+    Range("C60").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("D36").Value = Range("C60").Value
+    Application.CutCopyMode = False
+    Range("A1").Select
+    MsgBox "Zlecenie p³atnoœci zosta³o dodane do pliku ELIXIR-O"
+    
+End Sub
+Sub Wyczyœæ1()
+    
+    ActiveSheet.Protect Password:="2014", UserInterfaceOnly:=True
+    Range( _
+        "F3,F4,H3,H4,J3,G5,F7,F8,F9:H12,H7:H8,J7:K12,G14:G17,F18:F19,H18:H19,J18:J19,F20:K22,F26:K29,D32:K35" _
+        ).ClearContents
+        
+End Sub
+
+Sub Wyczyœæ2()
+
+    ActiveSheet.Protect Password:="2014", UserInterfaceOnly:=True
+    Range( _
+        "F3,F4,H3,H4,J3,G5,F7,F8,F9:H12,H7:H8,J7:K12,G14:G17,F18:F19,H18:H19,J18:J19,F20:K22,F26:K29,D32:K39" _
+        ).ClearContents
+        
+End Sub
+
+Sub ExportAsText()
+    
+    ActiveSheet.Protect Password:="2014", UserInterfaceOnly:=True
+    fo% = FreeFile
+    Open ActiveWorkbook.Path & "\Text_pliku_ELIXIR.txt" For Output As #fo%
+    Print #fo%, Worksheets("Arkusz1").Cells(36, 4).Value
+    Close #fo%
+    MsgBox "Zosta³ utworzony plik: Text_pliku_ELIXIR.txt w tym samym folderze co i skoroszyt."
+
+End Sub

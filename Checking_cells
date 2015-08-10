@@ -1,0 +1,21 @@
+Private Sub Worksheet_Change(ByVal Target As Range)
+    'If Target <> "" Then
+    Call Check
+End Sub
+
+Sub Check()
+
+    Dim R As Range, C As Range
+    Set R = Range("F8:F20")
+    
+    For Each C In R
+        If C.Value > C.Offset(0, -1).Value Then
+            MsgBox ("Íåâ³ðíî ââåäåíà äîõ³äíà ÷àñòíà äëÿ """ & C.Offset(0, -5).Value & """." & vbNewLine & _
+            "Çàãàëüíèé äîõ³ä ïîâèíåí áóòè ìåíøèì çà " & C.Offset(0, -1).Value)
+            
+            C.Offset(0, 1).Activate
+            Exit Sub
+        End If
+    Next
+    
+End Sub

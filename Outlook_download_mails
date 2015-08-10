@@ -1,0 +1,35 @@
+Sub MailSave()
+    Dim oOutlook As New Outlook.Application
+    Dim oNamespace As Outlook.Namespace
+    Dim myFolder As Outlook.Folder
+    Dim myMail As Outlook.Items
+    Dim myItem As Outlook.MailItem
+    Dim r
+
+        Set oNamespace = oOutlook.GetNamespace("MAPI")
+        Set myFolder = oNamespace.GetDefaultFolder(olFolderInbox).Folders("On-line çàÿâêà").Folders("2014")
+        Set myMail = myFolder.Items
+                
+                
+                
+        Cells.Clear
+        Cells(1, 1) = "From"
+        Cells(1, 2) = "E-mail"
+        Cells(1, 3) = "To"
+        Cells(1, 4) = "Theme"
+        Cells(1, 5) = "Date"
+        'Cells(1, 6) = "Text"
+
+        r = 2
+        For Each myItem In myMail
+            On Error Resume Next
+                Cells(r, 1) = myItem.SenderName
+                Cells(r, 2) = myItem.SenderEmailAddress
+                Cells(r, 3) = myItem.To
+                Cells(r, 4) = myItem.Subject
+                Cells(r, 5) = myItem.CreationTime
+                'Cells(r, 6) = myItem.Body
+            On Error GoTo 0
+            r = r + 1
+        Next
+End Sub

@@ -1,0 +1,80 @@
+Sub form()
+
+    'Range("A1").AutoFilter
+    Columns("B:B").Select
+    Selection.NumberFormat = "m/d/yyyy"
+    
+    Dim i&, a, ws As Worksheet, sh As Worksheet, r As Range, s As Worksheet, wb As Workbook
+    Set sh = Worksheets("Àðêóø1")
+    Set wb = ActiveWorkbook
+    a = sh.Range("C2:C" & sh.Cells(sh.Rows.Count, 3).End(xlUp).Row).Value
+    With CreateObject("Scripting.Dictionary")
+        For i = 1 To UBound(a)
+            .Item(a(i, 1)) = a(i, 1)
+        Next
+        Application.ScreenUpdating = 0
+        For Each a In .keys
+            sh.Copy after:=Sheets(Sheets.Count)
+            Set ws = ActiveSheet: ws.Name = .Item(a)
+            Set r = ws.Range("C1:C" & ws.Cells(ws.Rows.Count, 3).End(xlUp).Row)
+            r.AutoFilter 1, "<>" & .Item(a)
+            r.Offset(1).SpecialCells(12).EntireRow.Delete
+            ws.AutoFilterMode = 0: ws.DrawingObjects.Delete
+        Next
+        Application.ScreenUpdating = -1
+    End With
+    
+    Application.DisplayAlerts = False
+    Worksheets("2504").Delete
+    Worksheets("2505").Delete
+    Worksheets("2508").Delete
+    Worksheets("2509").Delete
+    Application.DisplayAlerts = True
+    
+    Dim y As Integer
+    y = Application.InputBox("Ââåä³òü íîìåð ì³ñÿöÿ, â ÿêîìó âèáðàòè ïîâòîðè")
+    
+    Dim wsh As Worksheet
+    For Each wsh In ThisWorkbook.Worksheets
+        wsh.Activate
+        
+        If wsh.Name = Sheets(1).Name Then GoTo 1
+        
+        Range("A1").AutoFilter
+        Range("A1").Value = y
+        
+        Range("A2").FormulaR1C1 = "=COUNTIF(C[12],RC[12])"
+        Range("A2").Select
+        Selection.AutoFill Destination:=Range(Range("A2"), Range("B2").End(xlDown).Offset(0, -1))
+        
+        Range("C2").FormulaR1C1 = "=IF(AND(RC[-2]>1,YEAR(RC[-1])=YEAR(NOW()),MONTH(RC[-1])=R1C1),1,0)"
+        Range("C2").Select
+        Selection.AutoFill Destination:=Range(Range("C2"), Range("B2").End(xlDown).Offset(0, 1))
+    
+        Columns("A:C").Copy
+        Range("A1").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+
+        ActiveSheet.Range(Range("A1"), Range("A1").End(xlDown).Offset(0, 19)).AutoFilter Field:=3, Criteria1:="0"
+        Rows("2:2").Select
+        Range(Selection, Selection.End(xlDown)).Delete Shift:=xlUp
+        
+        Range("A1").AutoFilter
+        Columns("A:C").Select
+        Selection.EntireColumn.Hidden = True
+1:
+    Next wsh
+    
+    For Each wsh In ThisWorkbook.Worksheets
+        wsh.Activate
+        Application.DisplayAlerts = False
+        If IsEmpty(wsh.Range("B2")) = True Then
+            wsh.Delete
+        End If
+        Application.DisplayAlerts = True
+    Next wsh
+    
+    Sheets("Àðêóø1").Visible = False
+    
+End Sub
+
